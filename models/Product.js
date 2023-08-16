@@ -1,0 +1,21 @@
+import mongoose from 'mongoose';
+
+const ProductSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    type: { type: String, default: 'pizza' },
+    ingredients: { type: Array },
+    prices: [
+      {
+        size: { type: String, enum: ['small', 'medium', 'large', 'any'], required: true },
+        price: { type: Number, required: true }
+      }
+    ],
+    imageUrl: { type: String, required: true }
+  },
+  {
+    timestamps: true
+  }
+)
+
+export default mongoose.model('Product', ProductSchema)
