@@ -4,9 +4,9 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import fs from 'fs'
 import { checkAuth, handleValidationErrors } from './utils/index.js';
-import { ProductController, ReviewController, UserController } from './controllers/index.js';
+import { ProductController, ReviewController, TypeController, UserController } from './controllers/index.js';
 import checkAdmin from './utils/checkAdmin.js';
-import { loginValidation, registrationValidation, reviewCreateValidation, productCreateValidation } from './validations/index.js';
+import { loginValidation, registrationValidation, reviewCreateValidation, productCreateValidation, updateUserValidation, typeCreateValidation } from './validations/index.js';
 
 const app = express()
 const PORT = 4444
@@ -42,6 +42,7 @@ app.post('/upload', checkAdmin, upload.single('image'), (req, res) => {
 
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
 app.post('/auth/registration', registrationValidation, handleValidationErrors, UserController.registration)
+app.patch('/auth/update', checkAuth, updateUserValidation, handleValidationErrors, UserController.updateUser)
 app.get('/auth/me', checkAuth, UserController.getMe)
 
 app.get('/reviews', ReviewController.getAll)
@@ -56,6 +57,11 @@ app.get('/products/:type', ProductController.getAllByType)
 app.post('/products', checkAdmin, productCreateValidation, handleValidationErrors, ProductController.create)
 app.patch('/products/:id', checkAdmin, productCreateValidation, handleValidationErrors, ProductController.update)
 app.delete('/products/:id', checkAdmin, ProductController.remove)
+
+
+app.get('/type', TypeController.getAll)
+app.post('/type', checkAdmin, typeCreateValidation, handleValidationErrors, TypeController.create)
+app.delete('/type/:id', checkAdmin, TypeController.remove)
 
 
 const startApp = async () => {

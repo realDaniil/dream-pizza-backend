@@ -10,5 +10,5 @@ export const productCreateValidation = [
   body('prices.*.price', 'Введіть ціну').isFloat({ min: 1 }),
   check('prices').isArray({ min: 1 }).withMessage('Невірний формат та ведіть розмір та ціну'),
   body('imageUrl', 'Невірний формат').isString(),
-  body('type', 'Невірний формат').optional().isString()
+  body('type', 'Введіть тип').isString()
 ]

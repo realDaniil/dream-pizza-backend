@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import UserModel from '../models/User.js';
+import UserModel from '../models/User.js'
 
 export const registration = async (req, res) => {
   try {
@@ -79,5 +79,43 @@ export const getMe = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Нет доступа' })
+  }
+}
+
+export const updateUser = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId)
+
+    if (!user) {
+      return res.status(404).json({ message: 'Пользователь не найден' })
+    }
+
+    if (req.body.email) {
+      user.email = req.body.email
+    }
+    if (req.body.fullName) {
+      user.fullName = req.body.fullName
+    }
+    if (req.body.avatarUrl) {
+      user.avatarUrl = req.body.avatarUrl
+    }
+
+    if (req.body.password && req.body.currentPassword) {
+      const isPasswordCorrect = await bcrypt.compare(req.body.currentPassword, user.passwordHash)
+      if (!isPasswordCorrect) {
+        return res.status(400).json({ message: 'Текущий пароль введен неверно' })
+      }
+      const salt = await bcrypt.genSalt(10)
+      const hash = await bcrypt.hash(req.body.password, salt)
+      user.passwordHash = hash
+    }
+
+    await user.save()
+
+    const { passwordHash, ...userData } = user._doc
+    res.json(userData)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Ошибка при обновлении данных пользователя' })
   }
 }

@@ -1,4 +1,5 @@
 import ProductModel from '../models/Product.js';
+import fs from 'fs'
 
 export const create = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ export const create = async (req, res) => {
     res.json(product)
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'Не вдалося створити продукт', error: error.errors, error })
+    res.status(500).json({ message: 'Не вдалося створити продукт' })
   }
 }
 
@@ -67,7 +68,7 @@ export const update = async (req, res) => {
       imageUrl: req.body.imageUrl,
       type: req.body.type
     }
-    
+
     const updatedProduct = await ProductModel.findByIdAndUpdate(
       reviewId,
       updateData,
@@ -88,11 +89,22 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   try {
     const productId = req.params.id
-    const deletedProduct = await ProductModel.findByIdAndDelete({ _id: productId })
 
+    const product = await ProductModel.findById(productId)
+    if (!product) {
+      return res.status(404).json({ message: 'Продукт не знайдено' })
+    }
+
+    const deletedProduct = await ProductModel.findByIdAndDelete({ _id: productId })
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Продукт не знайдено' })
     }
+    // При удаления изображений в папке uploads, проблема в том что если у разных
+    //     товаров будет одно изображение, то при удалении, оно у них всех пропадет  
+    // const imagePath = product.imageUrl.slice(1)
+    // if (fs.existsSync(imagePath)) {
+    //   fs.unlinkSync(imagePath)
+    // }
 
     res.json({ deleted: true })
   } catch (error) {
