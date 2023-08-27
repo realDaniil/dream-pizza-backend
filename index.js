@@ -46,6 +46,8 @@ app.patch('/auth/update', checkAuth, updateUserValidation, handleValidationError
 app.get('/auth/me', checkAuth, UserController.getMe)
 
 app.get('/reviews', ReviewController.getAll)
+app.get('/reviews-from-high-to-low', ReviewController.getAllFromHighToLow)
+app.get('/reviews-from-low-to-high', ReviewController.getAllFromLowToHigh)
 app.get('/reviews/:id', ReviewController.update)
 app.post('/reviews', checkAuth, reviewCreateValidation, handleValidationErrors, ReviewController.create)
 app.patch('/reviews/:id', checkAuth, reviewCreateValidation, handleValidationErrors, ReviewController.update)
@@ -53,7 +55,7 @@ app.delete('/reviews/:id', checkAuth, ReviewController.remove)
 
 app.get('/products', ProductController.getAll)
 app.get('/products/:id', ProductController.getOneById)
-app.get('/products/:type', ProductController.getAllByType)
+app.get('/products-by-type/:type', ProductController.getAllByType)
 app.post('/products', checkAdmin, productCreateValidation, handleValidationErrors, ProductController.create)
 app.patch('/products/:id', checkAdmin, productCreateValidation, handleValidationErrors, ProductController.update)
 app.delete('/products/:id', checkAdmin, ProductController.remove)
@@ -61,7 +63,18 @@ app.delete('/products/:id', checkAdmin, ProductController.remove)
 
 app.get('/type', TypeController.getAll)
 app.post('/type', checkAdmin, typeCreateValidation, handleValidationErrors, TypeController.create)
-app.delete('/type/:id', checkAdmin, TypeController.remove)
+app.delete('/type/:name', checkAdmin, TypeController.remove)
+
+
+app.post('/reviews/save', checkAdmin, ReviewController.saveReviewsInSavedReviews)
+app.post('/reviews/copy', checkAdmin, ReviewController.copyFromSavedReviews)
+app.post('/users/save', checkAdmin, UserController.saveUsersInSavedUsers)
+app.post('/users/copy', checkAdmin, UserController.copyFromSavedUsers)
+app.post('/products/save', checkAdmin, ProductController.saveProductsInSavedProducts)
+app.post('/products/copy', checkAdmin, ProductController.copyFromSavedProducts)
+app.post('/type/save', checkAdmin, TypeController.saveTypesInSavedTypes)
+app.post('/type/copy', checkAdmin, TypeController.copyFromSavedTypes)
+
 
 
 const startApp = async () => {

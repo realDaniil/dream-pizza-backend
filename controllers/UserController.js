@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import UserModel from '../models/User.js'
+import SavedUser from '../models/copies/SavedUser.js'
 
 export const registration = async (req, res) => {
   try {
@@ -117,5 +118,35 @@ export const updateUser = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Ошибка при обновлении данных пользователя' })
+  }
+}
+
+export const saveUsersInSavedUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find({})
+    if (users.length > 0) {
+      await SavedUser.deleteMany({})
+      const savedUsers = await SavedUser.insertMany(users)
+      res.json(savedUsers)
+    } else {
+      res.json({ message: 'Немає користувачів для завантаження' })
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Помилка під час завантаження користувачів' })
+  }
+}
+
+export const copyFromSavedUsers = async (req, res) => {
+  try {
+    const savedUsers = await SavedUser.find({})
+    if (savedUsers.length > 0) {
+      await UserModel.deleteMany({})
+      const users = await UserModel.insertMany(savedUsers)
+      res.json(users)
+    } else {
+      res.json({ message: 'Немає користувачів для копіювання' })
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Помилка під час копіювання користувачів' })
   }
 }

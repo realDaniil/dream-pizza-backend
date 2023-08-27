@@ -1,5 +1,6 @@
 import ProductModel from '../models/Product.js';
 import fs from 'fs'
+import SavedProduct from '../models/copies/SavedProduct.js';
 
 export const create = async (req, res) => {
   try {
@@ -110,5 +111,35 @@ export const remove = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Не вдалося видалити продукт' })
+  }
+}
+
+export const saveProductsInSavedProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.find({})
+    if (products.length > 0) {
+      await SavedProduct.deleteMany({})
+      const savedProducts = await SavedProduct.insertMany(products)
+      res.json(savedProducts)
+    } else {
+      res.json({ message: 'Немає продуктів для завантаження' })
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Помилка під час завантаження продуктів' })
+  }
+}
+
+export const copyFromSavedProducts = async (req, res) => {
+  try {
+    const savedProducts = await SavedProduct.find({})
+    if (savedProducts.length > 0) {
+      await ProductModel.deleteMany({})
+      const products = await ProductModel.insertMany(savedProducts)
+      res.json(products)
+    } else {
+      res.json({ message: 'Немає продуктів для копіювання' })
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Помилка під час копіювання продуктів' })
   }
 }
