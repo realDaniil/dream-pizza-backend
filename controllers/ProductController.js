@@ -58,6 +58,15 @@ export const getAllByType = async (req, res) => {
   }
 }
 
+export const getAllTopSales = async (req, res) => {
+  try {
+    const topSales = await ProductModel.find({ isTopSales: true })
+    res.json(topSales)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Не вдалося отримати топи продажів' })
+  }
+}
 
 export const update = async (req, res) => {
   try {
@@ -67,7 +76,8 @@ export const update = async (req, res) => {
       ingredients: req.body.ingredients,
       prices: req.body.prices,
       imageUrl: req.body.imageUrl,
-      type: req.body.type
+      type: req.body.type,
+      isTopSales: req.body.isTopSales
     }
 
     const updatedProduct = await ProductModel.findByIdAndUpdate(
