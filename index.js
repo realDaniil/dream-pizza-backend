@@ -8,7 +8,6 @@ import checkAdmin from './utils/checkAdmin.js';
 import { router } from './routes/index.js';
 
 const app = express()
-const PORT = process.env.PORT || 4444
 const DB_URL = process.env.MONGODB_URL
 
 app.use(express.json())
@@ -43,8 +42,8 @@ const startApp = async () => {
   try {
     await mongoose.connect(DB_URL)
     console.log('DB ok')
-    app.listen(PORT, () => {
-      console.log(`Server started on http://localhost:${PORT}`)
+    app.listen(process.env.PORT || 4444, () => {
+      console.log(`Server started`)
     })
   } catch (error) {
     console.log('Ошибка при подключении к Mongo DB', error)
