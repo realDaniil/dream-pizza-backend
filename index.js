@@ -8,8 +8,8 @@ import checkAdmin from './utils/checkAdmin.js';
 import { router } from './routes/index.js';
 
 const app = express()
-const PORT = 4444
-const DB_URL = 'mongodb+srv://user:user@cluster-dream.jdxjjqj.mongodb.net/?retryWrites=true&w=majority'
+const PORT = process.env.PORT || 4444
+const DB_URL = process.env.MONGODB_URL
 
 app.use(express.json())
 app.use(cors())
