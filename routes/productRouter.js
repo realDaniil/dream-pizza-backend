@@ -13,6 +13,8 @@ productRouter.post('/products', checkAdmin, productCreateValidation, handleValid
 productRouter.patch('/products/:id', checkAdmin, productCreateValidation, handleValidationErrors, ProductController.update)
 productRouter.delete('/products/:id', checkAdmin, ProductController.remove)
 
+
+// productRouter.post('/products/generate-cloudinary-url', handleValidationErrors, ProductController.generatecloudinaryUrl)
 // productRouter.post('/products/save', checkAdmin, ProductController.saveProductsInSavedProducts)
 productRouter.post('/products/copy', checkAdmin, ProductController.copyFromSavedProducts)
 

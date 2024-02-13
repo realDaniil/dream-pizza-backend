@@ -12,6 +12,7 @@ const ProductSchema = new mongoose.Schema(
       }
     ],
     imageUrl: { type: String, required: true },
+    cloudinaryUrl: { type: String, required: true },
     isTopSales: { type: Boolean, enum: [false, true], default: false }
   },
   {
