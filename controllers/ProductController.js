@@ -8,7 +8,7 @@ export const create = async (req, res) => {
       name: req.body.name,
       ingredients: req.body.ingredients,
       prices: req.body.prices,
-      imageUrl: req.body.imageUrl,
+      // imageUrl: req.body.imageUrl,
       cloudinaryUrl: req.body.cloudinaryUrl,
       type: req.body.type,
     });
@@ -74,7 +74,7 @@ export const update = async (req, res) => {
       name: req.body.name,
       ingredients: req.body.ingredients,
       prices: req.body.prices,
-      imageUrl: req.body.imageUrl,
+      // imageUrl: req.body.imageUrl,
       cloudinaryUrl: req.body.cloudinaryUrl,
       type: req.body.type,
       isTopSales: req.body.isTopSales,

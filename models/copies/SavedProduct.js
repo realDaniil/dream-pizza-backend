@@ -11,7 +11,7 @@ const SavedProductSchema = new mongoose.Schema(
         price: { type: Number, required: true }
       }
     ],
-    imageUrl: { type: String, required: true },
+    // imageUrl: { type: String, required: true },
     cloudinaryUrl: { type: String, required: true },
     isTopSales: { type: Boolean, enum: [false, true], default: false }
   },
